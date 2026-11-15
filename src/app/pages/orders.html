@@ -1,0 +1,47 @@
+<div class="page-heading">
+    <div><span class="eyebrow">SEGUIMIENTO CENTRALIZADO</span>
+        <h1>Mis pedidos</h1>
+        <p>Consulta tus pedidos activos y el historial de tus compras entregadas.</p>
+    </div>
+        <a routerLink="/catalogo" class="btn btn-primary">
+            <app-icon name="plus"/> Crear pedido</a>
+        </div>
+<div class="filter-pills mb-3" aria-label="Vista de pedidos">
+    @for(viewName of ['Todos','Activos','Historial'];track viewName)
+    {<button class="btn" [class.selected]="view()===viewName" (click)="view.set(viewName)">
+        {{viewName}}</button>}
+    </div>
+<div class="card catalog-tools mb-4">
+    <div class="search-field">
+        <app-icon name="search"/>
+        <input class="form-control" type="search" aria-label="Buscar pedidos" placeholder="Buscar pedido o cliente…" 
+        [ngModel]="query()" (ngModelChange)="query.set($event)">
+        </div><select class="form-select filter-select" aria-label="Filtrar por estado" 
+        [ngModel]="filter()" (ngModelChange)="filter.set($event)">@for(state of states;track state)
+        {<option>{{state}}</option>}</select>
+    </div>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead><tr>
+                <th>Pedido</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th
+                    ><th>Estado</th>
+                    <th><span class="visually-hidden">Acción</span>
+                    </th></tr></thead><tbody>@for(o of items();track o.id){<tr>
+                        <td><a [routerLink]="['/pedidos',o.id]" class="order-link">{{o.id}}
+
+                        </a></td>
+                        <td>{{o.client}}</td>
+                        <td class="text-nowrap">{{o.created|date:'dd/MM/yyyy'}}
+
+                        </td><td class="text-nowrap">{{o.total|currency:'PEN':'S/ '}}
+                            
+                        </td><td>
+                            <app-status [value]="o.status"/>
+                        </td><td><a [routerLink]="['/pedidos',o.id]" class="btn btn-sm btn-outline-secondary">Detalle</a>
+                        </td></tr>}@empty{<tr><td colspan="6" class="text-center py-5 text-secondary">No hay pedidos con estos filtros.</td>
+                        </tr>}</tbody></table>
+                    </div></div>
