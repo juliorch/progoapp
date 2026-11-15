@@ -1,0 +1,16 @@
+<a href="#main-content" class="skip-link">Saltar al contenido</a>
+@if(store.session() && !url().startsWith('/login')){
+ <div class="app-layout">
+  @if(menu()){<button class="menu-backdrop" aria-label="Cerrar menú" (click)="menu.set(false)"></button>}
+  <aside id="sidebar" class="sidebar" [class.mobile-open]="menu()" (keydown.escape)="menu.set(false)">
+   <a routerLink="/inicio" class="brand" (click)="menu.set(false)"><span class="brand-symbol">P</span><span>PROGO<span class="brand-dot">.</span></span></a>
+   <p class="sidebar-company">PROVIALIM S.A.C.</p><span class="nav-caption">ESPACIO DE TRABAJO</span>
+   <nav aria-label="Navegación principal" class="nav flex-column">@for(link of links();track link.path){<a class="nav-link" [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="menu.set(false)"><app-icon [name]="link.icon"/><span>{{link.label}}</span>@if(link.path==='/carrito' && store.count()){<span class="sidebar-count">{{store.count()}}</span>}</a>}</nav>
+   <div class="sidebar-bottom"><div class="workspace-card"><span class="green-dot"></span><div><strong>Operación conectada</strong><small>{{store.user()?.company}}</small></div></div><button class="logout-button" (click)="logout()"><app-icon name="logout"/> Cerrar sesión</button></div>
+  </aside>
+  <div class="main-area"><header class="topbar"><div class="d-flex align-items-center gap-3"><button class="btn menu-toggle" aria-label="Abrir menú" aria-controls="sidebar" [attr.aria-expanded]="menu()" (click)="menu.set(!menu())"><app-icon name="menu"/></button><span class="topbar-title">Gestión de pedidos <span class="topbar-divider">/</span><span class="text-secondary"> Panel de control</span></span></div><div class="d-flex align-items-center gap-3"><span class="demo-badge">DEMO LOCAL</span><span class="avatar">{{store.initials()}}</span><div class="user-name"><strong>{{store.user()?.name}}</strong><small>{{store.roleLabel()}}</small></div></div></header>
+   <main id="main-content" class="page-container" tabindex="-1"><router-outlet/></main><footer class="app-footer"><span>PROGO · PROVIALIM S.A.C.</span><span>Gestión inteligente de pedidos</span></footer>
+  </div>
+ </div>
+}@else{<main id="main-content" tabindex="-1"><router-outlet/></main>}
+@if(store.message()){<div class="notification-toast shadow" role="status" aria-live="polite"><span class="toast-mark"><app-icon name="check"/></span><span>{{store.message()}}</span><button aria-label="Cerrar notificación" class="btn" (click)="store.message.set('')">×</button></div>}

@@ -1,0 +1,21 @@
+<div class="login-layout">
+  <section class="login-story">
+    <a class="brand" routerLink="/login"><span class="brand-symbol">P</span><span>PROGO<span class="brand-dot">.</span></span></a>
+    <div class="login-pitch"><span class="eyebrow light">PROVIALIM S.A.C.</span><h1>Todo tu negocio.<br>Un solo lugar.</h1><p>Del primer pedido a la última entrega.<br>Conecta tu operación y sigue avanzando.</p>
+      <div class="flow-art" aria-hidden="true"><div><app-icon name="box"/><span>Productos</span></div><i></i><div><app-icon name="list"/><span>Pedidos</span></div><i></i><div><app-icon name="truck"/><span>Entregas</span></div></div>
+    </div><p class="small opacity-50 mb-0">Gestión inteligente de pedidos</p>
+  </section>
+  <section class="login-form-panel"><div class="login-form-wrap">
+    <div class="mb-4">@if(!logoMissing){<img src="img/logo.png" alt="PROGO" class="login-logo" (error)="logoMissing=true">}@else{<span class="brand-symbol">P</span>}</div>
+    <span class="eyebrow">BIENVENIDO A PROGO</span><h2 class="mt-2 mb-2">Tu operación comienza aquí.</h2><p class="text-secondary mb-4">Ingresa para gestionar tus pedidos y entregas.</p>
+    <form #form="ngForm" (ngSubmit)="enter(form.valid)" novalidate>
+      <label for="email" class="form-label">Correo electrónico</label><input id="email" class="form-control form-control-lg mb-3" name="email" type="email" [(ngModel)]="email" required email autocomplete="username" placeholder="nombre@empresa.com" [class.is-invalid]="submitted && !form.controls['email'].valid">
+      <label for="password" class="form-label">Contraseña de demostración</label><input id="password" class="form-control form-control-lg" name="password" type="password" [(ngModel)]="password" required minlength="4" autocomplete="current-password" placeholder="Al menos 4 caracteres">
+      @if(submitted && !form.valid){<p class="text-danger small mt-2" role="alert">Escribe un correo válido y una contraseña de al menos 4 caracteres.</p>}
+      @if(error){<p class="text-danger small mt-2" role="alert">{{error}}</p>}
+      <button class="btn btn-primary btn-lg w-100 mt-4" type="submit">Iniciar sesión <app-icon name="arrow"/></button>
+    </form>
+    <div class="demo-note mt-4"><strong>Modo demostración</strong><p class="mb-0 mt-1">Cliente: <b>cliente@progo.pe</b> / <b>Cliente123!</b><br>Administrador: <b>admin@progo.pe</b> / <b>Admin123!</b><br>Las cuentas son de prueba. No utilices contraseñas reales.</p></div>
+    <p class="small text-secondary mt-4">Los cambios se guardan en este navegador. No hay conexión con un servidor ni cuentas reales.</p>
+  </div></section>
+</div>

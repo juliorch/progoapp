@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.angular/
+out-tsc/
+.test-output/
+coverage/
+
+.env
+.env.*
+!.env.example
+
+*.log
