@@ -1,0 +1,60 @@
+<a routerLink="/entregas" class="back-link">← Volver a entregas</a>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">CONTROL DE ENTREGA</span>
+        <h1>Actualizar estado</h1>
+        <p>Confirma la recepción y registra una observación si es necesario.</p>
+    </div>
+</div>
+
+@if(order();as o){
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <section class="card p-4">
+                <span class="eyebrow">PEDIDO</span>
+                <h2 class="h4 mt-2">{{o.id}}</h2>
+                <div class="my-3">
+                    <app-status [value]="o.status"/>
+                </div>
+                <dl>
+                    <dt>Cliente</dt><dd>{{o.client}}</dd>
+                    <dt>Dirección</dt><dd>{{o.address}}</dd>
+                    <dt>Conductor</dt><dd>{{o.driver}}</dd>
+                </dl>
+            </section>
+        </div>
+        <div class="col-lg-7">
+            <section class="card p-4">
+                @if(o.status==='En camino'){
+                    <h2>Confirmar entrega</h2>
+                    <form (ngSubmit)="save()">
+                        <div class="form-check delivery-confirm my-4">
+                            <input id="delivered" class="form-check-input" type="checkbox" name="confirmed" [(ngModel)]="confirmed">
+                            <label for="delivered" class="form-check-label">
+                                <strong>La mercancía fue entregada</strong>
+                                <small class="d-block text-secondary">El cliente ha recibido su pedido.</small>
+                            </label>
+                        </div>
+                        <label for="notes" class="form-label">Observación (opcional)</label>
+                        <textarea id="notes" name="notes" [(ngModel)]="notes" class="form-control" rows="4" maxlength="500" placeholder="Ej. Pedido recibido por el encargado del local."></textarea>
+                        <div class="d-flex gap-3 mt-4">
+                            <button class="btn btn-primary" type="submit" [disabled]="!confirmed">Guardar cambios</button>
+                            <a routerLink="/entregas" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                }
+                @else{
+                    <h2>{{o.status==='Entregado'?'Este pedido ya fue entregado':'El pedido aún no está en camino'}}</h2>
+                    <a [routerLink]="['/pedidos',o.id]" class="btn btn-outline-dark mt-3">Ver detalle</a>
+                }
+            </section>
+        </div>
+    </div>
+}
+
+@else{
+    <div class="card empty-state">
+        <h2>Pedido no encontrado</h2>
+        <a routerLink="/entregas" class="btn btn-primary">Volver a entregas</a>
+    </div>
+}
