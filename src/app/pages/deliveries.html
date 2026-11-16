@@ -1,0 +1,26 @@
+<div class="page-heading">
+    <div><span class="eyebrow">LOGÍSTICA</span>
+        <h1>Gestión de entregas</h1>
+        <p>Sigue cada recorrido hasta que llegue a su destino.</p>
+    </div><a routerLink="/despachos" class="btn btn-outline-dark">Ver despachos</a>
+</div><div class="filter-pills mb-4">@for(state of ['Todos','En camino','Entregado'];track state)
+    {<button class="btn" [class.selected]="filter()===state" (click)="filter.set(state)">{{state}}
+
+    </button>}</div><div class="row g-4">@for(o of items();track o.id){<div class="col-lg-6 col-xxl-4"><article class="card p-4 h-100">
+        <div class="d-flex justify-content-between mb-3"><span class="icon-tile">
+            <app-icon name="truck"/></span><app-status [value]="o.status"/></div>
+            <h2 class="h5">{{o.id}}</h2><p class="fw-semibold">{{o.client}}</p>
+            <p class="text-secondary d-flex gap-2 small"><app-icon name="pin"/>{{o.address}}
+            </p><div class="driver-row mb-4"><span class="avatar">{{o.driver.slice(0,1)}}</span>
+                <div><small class="text-secondary d-block">Conductor asignado</small><strong>
+                    {{o.driver}}</strong></div></div><div class="d-flex gap-2 mt-auto">
+                        <a class="btn btn-outline-secondary flex-grow-1" [routerLink]="store.orderLink(o.id)">Ver detalle</a>@if(o.status!=='Entregado'){<a class="btn btn-primary flex-grow-1" [routerLink]="['/entregas',o.id,'actualizar']"
+                        >Actualizar</a>}
+                    </div></article></div>}@empty{<div class="col-12">
+                            <div class="card empty-state">
+                            <app-icon name="truck"/>
+                            <h2>No hay entregas en esta vista
+
+                        </h2><p>Los pedidos aparecerán aquí al despacharlos.
+                        
+                        </p></div></div>}</div>
