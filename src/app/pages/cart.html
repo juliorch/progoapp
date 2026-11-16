@@ -1,2 +1,64 @@
-<div class="page-heading"><div><span class="eyebrow">TU PRÓXIMO PEDIDO</span><h1>Carrito de compras</h1><p>Revisa los productos y confirma los datos de entrega.</p></div><a routerLink="/catalogo" class="btn btn-outline-dark">Seguir comprando</a></div>
-@if(store.cartLines().length){<div class="row g-4"><div class="col-xl-8"><section class="card"><div class="section-head"><h2>Productos <span class="text-secondary">({{store.count()}} und.)</span></h2></div>@for(c of store.cartLines();track c.id){<div class="cart-line"><div class="cart-image"><app-product-image [src]="c.product.img" [alt]="c.product.name"/></div><div class="cart-description"><a [routerLink]="['/catalogo',c.id]" class="order-link">{{c.product.name}}</a><small>{{c.product.price|currency:'PEN':'S/ '}} por unidad</small><button class="remove-button" (click)="store.remove(c.id)">Eliminar</button></div><div class="quantity-control"><button class="btn" [attr.aria-label]="'Quitar una unidad de '+c.product.name" (click)="store.change(c.id,-1)">−</button><span>{{c.qty}}</span><button class="btn" [attr.aria-label]="'Añadir una unidad de '+c.product.name" [disabled]="store.remaining(c.id)<=0" (click)="store.change(c.id,1)">+</button></div><strong class="text-nowrap">{{c.product.price*c.qty|currency:'PEN':'S/ '}}</strong></div>}</section></div><div class="col-xl-4"><section class="card summary-card"><h2>Resumen del pedido</h2><div class="summary-row"><span>Subtotal</span><strong>{{store.subtotal()|currency:'PEN':'S/ '}}</strong></div><div class="summary-row"><span>IGV (18%)</span><strong>{{store.tax()|currency:'PEN':'S/ '}}</strong></div><div class="summary-row total"><span>Total</span><strong>{{store.total()|currency:'PEN':'S/ '}}</strong></div><form #form="ngForm" (ngSubmit)="confirm(form.valid)"><label for="client" class="form-label mt-3">Cliente / establecimiento</label><input id="client" name="client" [(ngModel)]="client" required pattern=".*\S.*" class="form-control"><label for="address" class="form-label mt-3">Dirección de entrega</label><textarea id="address" name="address" [(ngModel)]="address" required pattern=".*\S.*" class="form-control" rows="2"></textarea><button class="btn btn-primary w-100 mt-4" type="submit" [disabled]="!form.valid">Confirmar pedido <app-icon name="arrow"/></button></form><p class="small text-secondary mt-3 mb-0">Esta demo registra el pedido localmente. No realiza cobros ni envía notificaciones.</p></section></div></div>}@else{<div class="card empty-state"><app-icon name="cart"/><h2>Tu carrito está vacío</h2><p>Encuentra lo que tu negocio necesita en nuestro catálogo.</p><a routerLink="/catalogo" class="btn btn-primary">Explorar catálogo <app-icon name="arrow"/></a></div>}
+<div class="page-heading">
+    <div><span class="eyebrow">TU PRÓXIMO PEDIDO</span>
+        <h1>Carrito de compras</h1>
+        <p>Revisa los productos y confirma los datos de entrega.</p>
+    </div>
+    <a routerLink="/catalogo" class="btn btn-outline-dark">Seguir comprando</a>
+</div>
+@if(store.cartLines().length){
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <section class="card">
+                <div class="section-head">
+                    <h2>Productos <span class="text-secondary">({{store.count()}} und.)</span></h2>
+                </div>
+                @for(c of store.cartLines();track c.id){
+                    <div class="cart-line">
+                        <div class="cart-image">
+                            <app-product-image [src]="c.product.img" [alt]="c.product.name"/>
+                        </div>
+                        <div class="cart-description">
+                            <a [routerLink]="['/catalogo',c.id]" class="order-link">{{c.product.name}}</a>
+                            <small>{{c.product.price|currency:'PEN':'S/ '}} por unidad</small>
+                            <button class="remove-button" (click)="store.remove(c.id)">Eliminar</button>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="btn" [attr.aria-label]="'Quitar una unidad de '+c.product.name" (click)="store.change(c.id,-1)">−</button><span>{{c.qty}}</span>
+                            <button class="btn" [attr.aria-label]="'Añadir una unidad de '+c.product.name" [disabled]="store.remaining(c.id)<=0" (click)="store.change(c.id,1)">+</button>
+                        </div>
+                        <strong class="text-nowrap">{{c.product.price*c.qty|currency:'PEN':'S/ '}}</strong>
+                    </div>
+                }</section>
+            </div>
+            <div class="col-xl-4">
+                <section class="card summary-card">
+                    <h2>Resumen del pedido</h2>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong>{{store.subtotal()|currency:'PEN':'S/ '}}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>IGV (18%)</span>
+                        <strong>{{store.tax()|currency:'PEN':'S/ '}}</strong>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span><strong>{{store.total()|currency:'PEN':'S/ '}}</strong>
+                    </div><form #form="ngForm" (ngSubmit)="confirm(form.valid)">
+                        <label for="client" class="form-label mt-3">Cliente / establecimiento</label>
+                        <input id="client" name="client" [(ngModel)]="client" required pattern=".*\S.*" class="form-control">
+                        <label for="address" class="form-label mt-3">Dirección de entrega</label>
+                        <textarea id="address" name="address" [(ngModel)]="address" required pattern=".*\S.*" class="form-control" rows="2"></textarea>
+                        <button class="btn btn-primary w-100 mt-4" type="submit" [disabled]="!form.valid">Confirmar pedido <app-icon name="arrow"/></button>
+                    </form>
+                    <p class="small text-secondary mt-3 mb-0">Esta demo registra el pedido localmente. No realiza cobros ni envía notificaciones.</p>
+                </section>
+            </div>
+        </div>
+    }@else{
+        <div class="card empty-state">
+            <app-icon name="cart"/>
+            <h2>Tu carrito está vacío</h2>
+            <p>Encuentra lo que tu negocio necesita en nuestro catálogo.</p>
+            <a routerLink="/catalogo" class="btn btn-primary">Explorar catálogo <app-icon name="arrow"/></a>
+        </div>
+    }
