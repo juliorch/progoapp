@@ -1,0 +1,52 @@
+<div class="page-heading">
+    <div><span class="eyebrow">RESUMEN GENERAL</span>
+        <h1>Todo listo para avanzar.</h1>
+        <p>Hola, {{store.user()?.name}}. {{store.isClient()?'Estos son tus pedidos.':'Así va la operación del almacén.'}}</p>
+    </div>
+        @if(store.isClient()){<a routerLink="/catalogo" class="btn btn-primary">
+    <app-icon name="plus"/> Crear pedido</a>}@else{<a routerLink="/despachos" class="btn btn-primary">Gestionar despachos</a>}
+</div>
+<div class="welcome-banner mb-4"><div>
+    <span class="eyebrow">TU NEGOCIO, CONECTADO</span>
+    <h2>Menos pasos.<br>Más pedidos en marcha.</h2>
+    <p>{{store.isClient()?'Encuentra tus productos y prepara tu próximo pedido.':'Consulta el inventario y coordina los pedidos pendientes.'}}</p>
+    <a routerLink="/catalogo" class="btn btn-dark">Explorar catálogo <app-icon name="arrow"/></a>
+</div>
+<div class="banner-art" aria-hidden="true">
+    <div class="parcel parcel-back"></div>
+    <div class="parcel"><app-icon name="box"/></div>
+    <span class="floating-label">
+        <span class="green-dot"></span> Todo bajo control</span></div></div>
+        <div class="row g-3 mb-4">
+ @for(kpi of [{label:'Pedidos registrados',value:store.orders().length,icon:'list',note:store.isClient()?'Solo tus compras':'Historial de la operación'},{label:'Pedidos activos',value:active(),icon:'box',note:'Pendientes de entrega'},{label:'En camino',value:moving(),icon:'truck',note:'Rumbo a su destino'},{label:'Entregados',value:done(),icon:'check',note:'Operaciones completadas'}];track kpi.label){
+ <div class="col-6 col-xl-3"><div class="card kpi-card h-100"><div class="d-flex justify-content-between"><span class="text-secondary small">{{kpi.label}}</span><span class="icon-tile"><app-icon [name]="kpi.icon"/></span></div><strong class="kpi-value">{{kpi.value}}</strong><span class="small text-secondary">{{kpi.note}}</span></div></div>}
+</div>
+<div class="row g-4">
+    <div class="col-xl-8">
+        <section class="card h-100">
+            <div class="section-head">
+                <div>
+                    <h2>Pedidos recientes</h2>
+                    <p>Consulta el estado de cada operación.</p>
+                </div>@if(store.isClient()){<a routerLink="/pedidos" class="text-link">Ver todos <app-icon name="arrow"/>
+                </a>}@else{<a routerLink="/despachos" class="text-link">Ver despachos <app-icon name="arrow"/>
+                </a>}</div><div class="table-responsive"><table class="table align-middle mb-0">
+                    <thead><tr><th>Pedido / cliente</th>
+                        <th>Fecha</th><th>Total</th><th>Estado</th>
+                    </tr></thead><tbody>@for(order of recent();track order.id){<tr>
+                        <td><a [routerLink]="store.orderLink(order.id)" class="order-link">{{order.id}}
+
+                        </a><small class="d-block text-secondary">{{order.client}}
+                        </small></td><td class="text-nowrap">{{order.created|date:'dd/MM/yyyy'}}</td>
+                        <td class="text-nowrap">{{order.total|currency:'PEN':'S/ '}}</td>
+                        <td><app-status [value]="order.status"/>
+                        </td></tr>}</tbody></table></div></section>
+                    </div><div class="col-xl-4"><section class="card quick-card h-100">
+                        <h2>Accesos rápidos</h2><p class="text-secondary small">Lo que necesitas, a un clic.
+
+                        </p>@for(link of quickLinks();track link.path){<a [routerLink]="link.path" class="quick-link">
+                            <span class="icon-tile"><app-icon [name]="link.icon"/></span><span><strong>{{link.title}}
+                                
+                            </strong><small>
+                                {{link.sub}}</small></span><app-icon name="arrow"/></a>}
+                            </section></div></div>
