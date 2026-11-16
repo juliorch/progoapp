@@ -1,0 +1,82 @@
+<div class="page-heading">
+  <div>
+    <span class="eyebrow">ALMACÉN</span>
+    <h1>Pedidos para despachar</h1>
+    <p>Prepara los pedidos y asigna al conductor antes de enviarlos.</p>
+  </div>
+  <span class="subtle-tag">{{ items().length }} pedidos en esta vista</span>
+</div>
+
+<div class="filter-pills mb-4">
+  @for (state of ['Todos', 'Recibido', 'En almacén']; track state) {
+    <button 
+      class="btn" 
+      [class.selected]="filter() === state" 
+      (click)="filter.set(state)">
+      {{ state === 'Recibido' ? 'Pendientes' : state === 'En almacén' ? 'En preparación' : state }}
+    </button>
+  }
+</div>
+
+<div class="row g-4">
+  @for (o of items(); track o.id) {
+    <div class="col-lg-6 col-xxl-4">
+      <article class="card p-4 h-100">
+        <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+          <span class="icon-tile">
+            <app-icon name="box" />
+          </span>
+          <app-status [value]="o.status" />
+        </div>
+
+        <h2 class="h5">
+          <a [routerLink]="store.orderLink(o.id)" class="order-link">{{ o.id }}</a>
+        </h2>
+        <p class="mb-1">{{ o.client }}</p>
+        <p class="text-secondary small">{{ o.address }}</p>
+
+        <div class="d-flex justify-content-between small border-top pt-3 mb-3">
+          <span>{{ o.lines.length }} línea(s) de productos</span>
+          <strong>Prioridad {{ o.priority }}</strong>
+        </div>
+
+        @if (o.status === 'Recibido') {
+          <button 
+            class="btn btn-primary mt-auto" 
+            (click)="store.update(o.id, 'En almacén')">
+            Iniciar preparación <app-icon name="arrow" />
+          </button>
+        } @else {
+          <label [for]="'driver-' + o.id" class="form-label small">
+            Conductor asignado
+          </label>
+          <select 
+            class="form-select mb-3" 
+            [id]="'driver-' + o.id" 
+            [ngModel]="drivers[o.id] || (o.driver === 'Por asignar' ? '' : o.driver)" 
+            (ngModelChange)="drivers[o.id] = $event">
+            <option value="">Seleccionar conductor</option>
+            @for (driver of ['Jorge Huanca', 'Luis Quispe', 'Pedro Vargas']; track driver) {
+              <option [value]="driver">{{ driver }}</option>
+            }
+          </select>
+
+          <button 
+            class="btn btn-primary mt-auto" 
+            (click)="dispatch(o.id)">
+            Despachar pedido <app-icon name="truck" />
+          </button>
+        }
+      </article>
+    </div>
+  } @empty {
+    <div class="col-12">
+      <div class="card empty-state">
+        <app-icon name="check" />
+        <h2>Todo al día</h2>
+        <p>No hay pedidos pendientes en esta vista.</p>
+        <a routerLink="/entregas" class="btn btn-outline-dark">Ver entregas</a>
+      </div>
+    </div>
+  }
+</div>
